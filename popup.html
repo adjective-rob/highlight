@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="UTF-8">
+  <title>Highlight Saver Pro</title>
+  <style>
+    body {
+      width: 400px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 15px;
+      margin: 0;
+      color: #333;
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    
+    h1 {
+      font-size: 18px;
+      margin: 0;
+      color: #4285f4;
+    }
+    
+    .tab-container {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .tab {
+      padding: 8px 15px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .tab.active {
+      border-bottom: 2px solid #4285f4;
+      color: #4285f4;
+      font-weight: 500;
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .stats {
+      margin-bottom: 15px;
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .stat-box {
+      text-align: center;
+      flex: 1;
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .stat-value {
+      font-size: 18px;
+      font-weight: 500;
+      color: #4285f4;
+    }
+    
+    .search-box {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+    
+    .highlights-container {
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+    }
+    
+    .highlight-item {
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      position: relative;
+    }
+    
+    .highlight-item:last-child {
+      border-bottom: none;
+    }
+    
+    .highlight-item:hover {
+      background-color: #f8f9fa;
+    }
+    
+    .highlight-category {
+      display: inline-block;
+      padding: 2px 6px;
+      border-radius: 12px;
+      font-size: 11px;
+      margin-bottom: 5px;
+      color: white;
+    }
+    
+    .highlight-meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    
+    .highlight-text {
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 5px;
+    }
+    
+    .highlight-source {
+      font-size: 11px;
+      color: #4285f4;
+      text-decoration: none;
+      display: block;
+      margin-top: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .highlight-source:hover {
+      text-decoration: underline;
+    }
+    
+    .highlight-actions {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      display: none;
+    }
+    
+    .highlight-item:hover .highlight-actions {
+      display: block;
+    }
+    
+ .action-btn {
+  background-color: #f8f9fa;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #3c4043;
+  font-size: 12px;
+  padding: 3px 8px;
+  margin-left: 4px;
+}
+
+.action-btn:hover {
+  background-color: #f1f3f4;
+  border-color: #d2d5d9;
+  color: #1a73e8;
+}
+    
+    button {
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    
+    button:hover {
+      background-color: #3367d6;
+    }
+    
+    .btn-secondary {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .btn-group {
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .category-form {
+      margin-bottom: 15px;
+    }
+    
+    .form-row {
+      margin-bottom: 10px;
+      display: flex;
+    }
+    
+    .form-row label {
+      width: 80px;
+      font-size: 13px;
+      line-height: 30px;
+    }
+    
+    .form-row input {
+      flex: 1;
+      padding: 5px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .category-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    
+    .category-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .category-color {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: #666;
+    }
+    
+    .empty-state p {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Highlight Saver Pro</h1>
+    <div id="version">v1.0</div>
+  </header>
+  
+  <div class="tab-container">
+    <div class="tab active" data-tab="highlights">Highlights</div>
+    <div class="tab" data-tab="categories">Categories</div>
+    <div class="tab" data-tab="settings">Settings</div>
+  </div>
+  
+  <div id="highlights-tab" class="tab-content active">
+    <div class="stats">
+      <div class="stat-box">
+        <div class="stat-label">Total Highlights</div>
+        <div class="stat-value" id="highlightCount">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Categories</div>
+        <div class="stat-value" id="categoryCount">0</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">This Week</div>
+        <div class="stat-value" id="weekCount">0</div>
+      </div>
+    </div>
+    
+    <input type="text" class="search-box" id="searchInput" placeholder="Search highlights...">
+    
+    <div class="highlights-container" id="highlightsContainer">
+      <!-- Highlights will be inserted here -->
+    </div>
+    
+    <div class="btn-group">
+      <button id="downloadBtn">Download CSV</button>
+      <button id="clearBtn" class="btn-secondary">Clear All</button>
+    </div>
+  </div>
+  
+  <div id="categories-tab" class="tab-content">
+    <div class="category-form">
+      <div class="form-row">
+        <label for="categoryName">Name:</label>
+        <input type="text" id="categoryName" placeholder="Category name">
+      </div>
+      <div class="form-row">
+        <label for="categoryColor">Color:</label>
+        <input type="color" id="categoryColor" value="#4285f4">
+      </div>
+      <button id="addCategoryBtn">Add Category</button>
+    </div>
+    
+    <div class="category-list" id="categoryList">
+      <!-- Categories will be inserted here -->
+    </div>
+  </div>
+  
+  <div id="settings-tab" class="tab-content">
+    <div class="form-row">
+      <label for="csvFilename">CSV Filename:</label>
+      <input type="text" id="csvFilename" value="highlights.csv">
+    </div>
+    
+    <div class="form-row">
+      <label for="autoBackup">Auto-backup:</label>
+      <select id="autoBackup">
+        <option value="never">Never</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+      </select>
+    </div>
+    
+    <button id="saveSettingsBtn">Save Settings</button>
+    <button id="exportDataBtn" class="btn-secondary">Export All Data</button>
+    <button id="importDataBtn" class="btn-secondary">Import Data</button>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
